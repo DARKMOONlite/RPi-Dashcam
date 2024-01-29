@@ -1,11 +1,12 @@
 
-from picamera2 import Picamera2, Preview
+# from picamera2 import Picamera2, Preview
 # from picamera2.array import PiRGBArray
-import time, os
+import time, os, sys
 import numpy as np
 from numpy import array
 import cv2 as cv
-
+# from getch import getch
+import readchar
 class intrinsic_matrix:
     def __init__(self,fx,fy,cx,cy) -> None:
         self.focal_length = [fx,fy]
@@ -50,7 +51,8 @@ class app:
 
     def camera_calibration(self):
         print("to complete camera callibration, please follow the guide in the readme file \n press enter to continue, or anything else to exit")
-        confirmation = sys.stdin.read(1)
+        confirmation = readchar.readchar()
+        print("confirmation received: {0}".format(confirmation))
         if(confirmation != "\r"): 
             return
         print("please enter the size of the chessboard square in mm")
@@ -88,7 +90,7 @@ class app:
 
         while(callibration_count > 0):
             print("press enter to take a picture")
-            confirmation = msvcrt.getch().decode("utf-8")
+            confirmation = readchar.readchar()
             if(confirmation == "\r"): 
                 
                 image = self.take_simple_photo()
