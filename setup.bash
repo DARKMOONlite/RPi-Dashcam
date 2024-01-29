@@ -9,7 +9,7 @@ sudo apt install nginx
 
 # set nginx settings by replacing default file
 sudo mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
-sudo cp ./nginx/default /etc/nginx/sites-available/default
+sudo cp ./nginx/default.conf /etc/nginx/sites-available/default
 
 # copy webserver files to /var/www/cam
 sudo mkdir -p /var/www/cam
