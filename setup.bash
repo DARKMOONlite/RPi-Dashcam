@@ -12,7 +12,7 @@ sudo mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.ba
 sudo cp ./nginx/default /etc/nginx/sites-available/default
 
 # copy webserver files to /var/www/cam
-sudo mkdir /var/www/cam
+sudo mkdir -p /var/www/cam
 sudo cp -a ./webserver/. /var/www/cam/
 
 # restart the nginx service after settings set
