@@ -1,6 +1,6 @@
 
-from picamera2 import PiCamera2, Preview
-from picamera2.array import PiRGBArray
+from picamera2 import Picamera2, Preview
+# from picamera2.array import PiRGBArray
 import time, os
 import numpy as np
 from numpy import array
@@ -119,7 +119,6 @@ class app:
 
 
     def take_simple_photo(self):
-        with PiCamera2() as camera:
-            rawCapture = PiRGBArray(camera)
-            camera.capture(rawCapture, format="bgr")
-            return(rawCapture.array)
+        with Picamera2() as camera:
+            capture_array=camera.capture_array()
+            return(capture_array)
