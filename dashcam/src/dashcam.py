@@ -5,7 +5,7 @@ import time, os
 import numpy as np
 from numpy import array
 import cv2 as cv
-import msvcrt
+
 class intrinsic_matrix:
     def __init__(self,fx,fy,cx,cy) -> None:
         self.focal_length = [fx,fy]
@@ -50,7 +50,7 @@ class app:
 
     def camera_calibration(self):
         print("to complete camera callibration, please follow the guide in the readme file \n press enter to continue, or anything else to exit")
-        confirmation = msvcrt.getch().decode("utf-8")
+        confirmation = sys.stdin.read(1)
         if(confirmation != "\r"): 
             return
         print("please enter the size of the chessboard square in mm")
