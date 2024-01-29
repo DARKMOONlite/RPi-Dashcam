@@ -2,15 +2,40 @@
 <html>
 
     <head>
+
+
         <title>Raspberry Pi Dashcam webserver</title>
         <link rel="stylesheet" type="text/css" href="styles/style-main.css">
     </head>
 
     <body>
+        <div class="sidebar">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="video.html">Video</a></li>
+                <li><a href="images.html">Images</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </div>
+        <div class="header">
+            <img id="icon" src="media/basic icon.jfif" alt="Icon">
+            <select id="dropdown-menu">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
         <h1>Goal of this webserver</h1>
-        <p>This page should be used to view video feeds when the vehicle returns home or the device is taken out of the car
-            and or be used to search/scrub for specific video moments.
-        </p>
+        <hr class="divider">
+        <div class="container">
+            <div class="column">
+                <p>This page attempts to do 2 things, IDK which one makes more sense. a point to access a current feed from the Raspberry pi camera or a method to access stored video files and scrub/ YOLO for things like events or specific number plates etc.
+                </p>
+            </div>
+            <div class="column">
+                <p>And or be used to search/scrub for specific video moments.</p>
+            </div>
+        </div>
     </body>
 
 </html>

@@ -1,6 +1,104 @@
+@import 'colours.css';
+body {
+    background-color: var(--primary-colour);
+    color: var(--text-colour);
+    font-family: Arial, sans-serif;
+    margin-left: 180px;
+}
+
 h1 {
-    color: #5809c0; /* Dark grey color */
-    font-family: Arial, sans-serif; /* Use Arial if available, otherwise use a generic sans-serif font */
-    font-size: 2em; /* 2 times the default font size */
-    text-align: center; /* Center the text */
+
+    font-size: 2.5em;
+    /* text-align: left; */
+    padding-top: 20px;
+    padding-left: 20px;
+
+}
+
+
+#icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid var(--secondary-colour);
+    /* padding-top: 10px;
+    padding-left: 10px; */
+
+}
+#dropdown-menu {
+    width: 200px; /* Adjust as needed */
+    height: 40px; /* Adjust as needed */
+    margin-bottom: 20px; /* Adds some space below the dropdown menu */
+    background-color: var(--primary-colour);
+    color: var(--text-colour);
+    border-color: var(--primary-colour);
+    font-size: 32px; /* Adjust as needed */
+    font-family: Arial, sans-serif; /* Adjust as needed */
+    float: right;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+}
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 120px;
+    background-color: var(--secondary-colour);
+    padding: 20px;
+}
+.sidebar ul {
+    list-style-type: none;
+    padding: 0px;
+
+
+
+}
+
+.sidebar ul li {
+    margin-bottom: 20px; /* Increase separation */
+    text-align: center;
+
+}
+
+.sidebar ul li a {
+    color: var(--text-colour);
+    border: 1px solid var(--text-colour);
+    
+
+    font-size: 32px; /* Adjust as needed */
+    font-family: Arial, sans-serif; /* Adjust as needed */
+    font-weight: bold;
+    text-decoration: none;
+    box-sizing: border-box;
+
+    /* padding: 10px; */
+
+
+
+
+
+
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.column {
+    width: 45%; /* Adjust as needed */
+    padding: 10px;
+}
+
+.divider {
+    border: 0;
+    height: 2px;
+    background: var(--secondary-colour) ; /* Change to the color you want */
+    margin: 20px 0;
 }
