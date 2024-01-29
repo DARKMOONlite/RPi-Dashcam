@@ -1,0 +1,6 @@
+h1 {
+    color: #5809c0; /* Dark grey color */
+    font-family: Arial, sans-serif; /* Use Arial if available, otherwise use a generic sans-serif font */
+    font-size: 2em; /* 2 times the default font size */
+    text-align: center; /* Center the text */
+}
