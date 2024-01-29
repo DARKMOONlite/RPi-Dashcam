@@ -4,10 +4,10 @@ FROM nginx:1.23.4-alpine-slim as nginx
 
 WORKDIR /var/www/cam/
 
-COPY webserver/ /
+COPY webserver/ /var/www/cam/
 
 COPY nginx/default.conf /etc/nginx/conf.d/
 
-EXPOSE 3000
+EXPOSE 80
 
 ENTRYPOINT nginx -g "daemon off;"
