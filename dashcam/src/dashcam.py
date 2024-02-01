@@ -52,8 +52,8 @@ class app:
     def camera_calibration(self):
         print("to complete camera callibration, please follow the guide in the readme file \n press enter to continue, or anything else to exit")
         confirmation = input()
-        print("confirmation received: {0}".format(confirmation))
-        if(confirmation != "\r"): 
+        print("confirmation received: '{0}'".format(confirmation))
+        if(confirmation != ""): 
             return
         print("please enter the size of the chessboard square in mm")
         while True:
@@ -83,8 +83,8 @@ class app:
             except ValueError:
                 print("Invalid input. Please enter two integers.")   
 
-        objp = np.zeros((chessboard_size[1]*chessboard_size[2], 3), np.float32)
-        objp[:, :2] = np.mgrid[0:chessboard_size[1], 0:chessboard_size[2]].T.reshape(-1, 2)  # x,y coordinates
+        objp = np.zeros((chessboard_size[0]*chessboard_size[1], 3), np.float32)
+        objp[:, :2] = np.mgrid[0:chessboard_size[0], 0:chessboard_size[1]].T.reshape(-1, 2)  # x,y coordinates
         
         image_points = []
 
