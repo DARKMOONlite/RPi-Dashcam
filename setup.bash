@@ -7,7 +7,7 @@ sudo apt install -y supervisor nginx
 
 # install required packages
 sudo apt install -y python3-picamera2 python3-readchar
-sudo apt install -y python3-pyqt5 python3-opengl
+sudo apt install -y python3-pyqt5 python3-opengl python3-venv
 sudo apt install -y python3-opencv opencv-data
 
 
@@ -23,7 +23,7 @@ sudo cp -a ./webserver/. /var/www/cam/
 
 # start supervisor
 sudo systemctl enable supervisor
-sudo systemctl start supervisor
+
 
 
 
