@@ -1,11 +1,9 @@
-
-
-
-sudo systemctl start supervisor
-python3.11 -m venv .venv
+#!/bin/bash
 source .venv/bin/activate
-pip install -r requirements.txt
+sudo systemctl restart nginx
+
+
+
+
 uvicorn dashcam/src/fast-api:app
 
-
-curl http://localhost:8000
