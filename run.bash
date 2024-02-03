@@ -5,5 +5,5 @@ sudo systemctl restart nginx
 
 
 
-uvicorn dashcam/src/fast-api:app
+uvicorn main:app
 
