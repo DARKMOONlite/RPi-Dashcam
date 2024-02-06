@@ -8,7 +8,7 @@ sudo apt install -y supervisor nginx
 
 # install required packages 
 #? maybe move these into the virtual environment
-sudo apt install -y python3-picamera2 python3-readchar
+sudo apt install -y python3-picamera2 
 sudo apt install -y python3-pyqt5 python3-opengl python3-venv
 sudo apt install -y python3-opencv opencv-data
 

@@ -1,14 +1,3 @@
-const express = require('express');
-const cors = require('cors');
-
-const app = express();
-
-app.use(cors());
-
-// your routes here
-
-app.listen(3000, () => console.log('Server started'));
-
 
 // Get the button element
 const button = document.getElementById('fetchButton');
