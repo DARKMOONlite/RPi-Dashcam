@@ -1,3 +1,23 @@
 
+# Current method of storing settings is {camera_id}-{Setting}={value}
 
-# Cammera App currently Running
+1-Running=1
+
+
+
+
+
+# Camera Intrinsics:
+1-resolution-x=
+1-resolution-y=
+1-focal_length-x=
+1-focal_length-y=
+1-principal_point-x=
+1-principal_point-y=
+
+
+# Camera Operating Settings:
+
+1-frame_rate=10
+1-stored_video=True
+

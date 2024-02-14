@@ -1,29 +1,51 @@
 
-# from picamera2 import Picamera2, Preview
-# from picamera2.array import PiRGBArray
+from picamera2 import Picamera2, Preview
+from picamera2.encoders import H264Encoder, Quality
+from picamera2.array import PiRGBArray
+
 import time, os, sys
 import numpy as np
 from numpy import array
 import cv2 as cv
-# from getch import getch
+from dashcam.src.settings import Settings
+from dashcam.src.camera_intrinsics import intrinsic_matrix
 
-class intrinsic_matrix:
-    def __init__(self,fx,fy,cx,cy) -> None:
-        self.focal_length = [fx,fy]
-        self.principal_point = [cx,cy]
-        self.matrix = array([[fx,0,cx],[0,fy,cy],[0,0,1]])
-        pass
+
 
 
 class app:
     
 
-    def __init__(self, debug:bool=False, destination:str=None, camera_intrinsics:intrinsic_matrix=None):
+    def __init__(self, debug:bool=False, destination:str=None, 
+                camera_id:int=0,
+                load:bool=False, settings_file:str=None):
         self.debug = debug
         self.destination = destination
         self.module_list=[]
-        self.camera_intrinsics = camera_intrinsics
+        self.id = camera_id
+        
+        if(load):
+            self.stored_settings = Settings(settings_file)
+            self.load(settings_file)
 
+    
+    def load(self):
+        if(self.stored_settings is None):
+            print('No settings file found')
+            return
+        else:
+            self.camera_intrinsics = intrinsic_matrix(
+                self.stored_settings.read_setting(f"{self.id}-focal_length-x"),
+                self.stored_settings.read_setting(f"{self.id}-focal_length-y"),
+                self.stored_settings.read_setting(f"{self.id}-principal_point-x"),
+                self.stored_settings.read_setting(f"{self.id}-principal_point-y")
+            )
+            print('Loaded camera intrinsics from file')
+            self.frame_rate = self.stored_settings.read_setting(f"{self.id}-frame_rate")
+            self.stored_video = self.stored_settings.read_setting(f"{self.id}-stored_video")
+            print("loaded general settings from {0}".format(self.stored_settings.settings_file))
+            return
+            
 
 
 
@@ -49,78 +71,16 @@ class app:
         self.camera_intrinsics = camera_intrinsics
 
 
-    def camera_calibration(self):
-        print("to complete camera callibration, please follow the guide in the readme file \n press enter to continue, or anything else to exit")
-        confirmation = input()
-        print("confirmation received: '{0}'".format(confirmation))
-        if(confirmation != ""): 
-            return
-        print("please enter the size of the chessboard square in mm")
-        while True:
-            try:
-                size = float(input())
-                break
-            except ValueError:
-                print("Invalid input. Please enter a number.")
-
-        print("please enter the number of images to use for callibration (recommended 10)")
-        while True:
-            try:
-                callibration_count = int(input())
-                if(callibration_count < 1):
-                    raise ValueError
-                break
-            except ValueError:
-                print("Invalid input. Please enter an integer.")
-        print("please enter the size of the chess board, number of squares, please enter two integer values separated by a space ")
-        while True:
-            try:
-                chessboard_size = input().split()
-                if(len(chessboard_size) != 2):
-                    raise ValueError
-                chessboard_size = (int(chessboard_size[0]),int(chessboard_size[1]))
-                break
-            except ValueError:
-                print("Invalid input. Please enter two integers.")   
-
-        objp = np.zeros((chessboard_size[0]*chessboard_size[1], 3), np.float32)
-        objp[:, :2] = np.mgrid[0:chessboard_size[0], 0:chessboard_size[1]].T.reshape(-1, 2)  # x,y coordinates
-        
-        image_points = []
-
-        while(callibration_count > 0):
-            print("press enter to take a picture")
-            confirmation = input()
-            if(confirmation == "\r"): 
-                
-                image = self.take_simple_photo()
-                gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-                result, corner = cv.findChessboardCorners(gray, chessboard_size, None)
-                if(result==True):
-                    callibration_count -= 1
-                    image_points.append(corner)
-                    print("picture resolved, {0} remaining".format(callibration_count))
-                else:
-                    print("no chessboard found, please try again")
-        
-        ret, camera_matrix, dist, rvecs, tvecs = cv.calibrateCamera(objp, image_points, gray.shape[::-1], None, None)
-        
-
-        newcamera_matrix, roi = cv.getOptimalNewCameraMatrix(camera_matrix, dist, gray.shape[::-1], 1, gray.shape[::-1])
-        dst = cv.undistort(gray, camera_matrix, dist, None, newcamera_matrix)
-
-
-        # calculate re-projection error
-
-        mean_error = 0
-        for i in range(len(objp)):
-            imgpoints2, _ = cv.projectPoints(objp[i], rvecs[i], tvecs[i], camera_matrix, dist)
-            error = cv.norm(image_points[i], imgpoints2, cv.NORM_L2) / len(imgpoints2)
-            mean_error += error
-        print("total error: {}".format(mean_error / len(objp)))
-
 
     def take_simple_photo(self):
         with Picamera2() as camera:
             capture_array=camera.capture_array()
             return(capture_array)
+        
+    def take_simple_video(self, duration:int):
+        with Picamera2() as camera:
+            encoder = H264Encoder(bitrate=10000000)
+            camera.start_recording(encoder,desination=self.destination,quality=Quality.Medium)
+            time.sleep(duration)
+            camera.stop_recording()
+            return
