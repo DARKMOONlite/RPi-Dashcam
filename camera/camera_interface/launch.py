@@ -9,5 +9,5 @@ if __name__ == '__main__':
     from dashcam import app
     application = app(debug=True)
     application.run()
-    application.camera_calibration()
+    # application.camera_calibration()
 
