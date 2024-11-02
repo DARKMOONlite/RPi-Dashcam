@@ -1,6 +1,6 @@
 # RPi-Dashcam
 
-Simple raspberry pi dashcam
+
 
 ## Quickstart (with Docker for testing)
 
@@ -20,3 +20,6 @@ Clone/copy the repo to the pi and run,
 ```sh
 ./setup.bash
 ```
+
+
+## [Camera System Architecture](/camera/readme.md)
