@@ -21,7 +21,13 @@ graph TD
 ## Orchestrator:
 to make things easy the Orchestrator will be made in `C++`, and will call and run the other subsystems and modules. it will also
 
-
+## Languages I Want to try and create modules in:
+- [**GO**](https://go.dev/)
+    - Has a cycloneDDS package https://pkg.go.dev/github.com/ex-purple/cyclonedds-go
+- [**RUST**](https://www.rust-lang.org/)
+    - repo with cyclonedds rust bindings https://github.com/sjames/cyclonedds-rs
+- [**ZIG**](https://ziglang.org/)
+    - ?
 ## Modules
 modules are pieces of code that interface with the top level orchestrator using the Middleware, they can be written in any language.
 
