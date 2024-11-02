@@ -10,9 +10,9 @@ I want this project to test my ability to use different languages, so I want sys
 
 ```mermaid
 graph TD
-    Z[Orchestrator] <--> A
-    A[Middleware] <-->|Process| B(Processing)
-    A[Middleware] <-->|Collect| C(Collecting)
+    Z["Orchestrator **(C++)** "] <--> A
+    A["Middleware **(CycloneDDS)**"] <-->|Process| B("Encoder **(C)**")
+    A <-->|Collect| C("Camera Interface **(Python)**")
     style B fill:#7C0B2B
     style C fill:#FB4B4E
     style A fill:#3E000C
