@@ -1,0 +1,59 @@
+{
+  "module_id": "camera_interface",
+  "module_type": "camera_interface",
+  "version": "1.0.0",
+  "description": "Raspberry Pi Camera Interface with DDS Integration",
+  
+  "camera": {
+    "resolution": [1920, 1080],
+    "framerate": 30,
+    "exposure_mode": "auto",
+    "white_balance": "auto",
+    "iso": 0,
+    "brightness": 50,
+    "contrast": 0,
+    "saturation": 0,
+    "sharpness": 0,
+    "digital_gain": 1.0,
+    "rotation": 0,
+    "hflip": false,
+    "vflip": false
+  },
+  
+  "dds": {
+    "domain_id": 0,
+    "participant_name": "camera_interface",
+    "image_topic": "camera/raw_images",
+    "control_topic": "camera/control",
+    "status_topic": "camera/status"
+  },
+  
+  "calibration": {
+    "auto_load": true,
+    "file": "/etc/dashcam/camera_calibration.json",
+    "auto_calibrate_on_startup": false,
+    "calibration_board_size": [9, 6],
+    "calibration_square_size_mm": 20.0
+  },
+  
+  "performance": {
+    "buffer_size": 10,
+    "max_queue_size": 100,
+    "enable_frame_dropping": true,
+    "max_cpu_usage": 80.0
+  },
+  
+  "logging": {
+    "level": "INFO",
+    "file": "/var/log/dashcam/camera_interface.log",
+    "max_size_mb": 50,
+    "backup_count": 3
+  },
+  
+  "features": {
+    "enable_timestamp_overlay": false,
+    "enable_metadata_logging": true,
+    "enable_performance_monitoring": true,
+    "publish_diagnostics": true
+  }
+}

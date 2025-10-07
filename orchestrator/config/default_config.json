@@ -1,0 +1,137 @@
+{
+  "system": {
+    "name": "Raspberry Pi Dashcam",
+    "version": "1.0.0",
+    "log_level": "info",
+    "auto_start_modules": true
+  },
+  "dds": {
+    "domain_id": 0,
+    "participant_name": "dashcam_orchestrator",
+    "qos_profile": "reliable",
+    "discovery_timeout_ms": 5000,
+    "heartbeat_interval_ms": 1000
+  },
+  "modules_directory": "/opt/dashcam/modules",
+  "startup_order": [
+    "camera_interface",
+    "stream_encoder",
+    "web_interface"
+  ],
+  "modules": [
+    {
+      "id": "camera_interface",
+      "name": "Raspberry Pi Camera Interface",
+      "type": "camera_interface",
+      "language": "python",
+      "executable": "/opt/dashcam/modules/camera_interface/camera_interface.py",
+      "auto_restart": true,
+      "config": {
+        "camera_id": 0,
+        "size_x":1920,
+        "size_y":1080,
+        "framerate": 30,
+        "output_topic": "camera/raw_images",
+        "control_topic": "camera/control",
+        "status_topic": "camera/status"
+      }
+    },
+    {
+      "id": "stream_encoder",
+      "name": "H.264 Stream Encoder",
+      "type": "stream_encoder",
+      "language": "c",
+      "executable": "/opt/dashcam/modules/stream_encoder/stream_encoder",
+      "auto_restart": true,
+      "config": {
+        "input_topic": "camera/raw_images",
+        "output_file": "/var/dashcam/recordings/stream_{timestamp}.mp4",
+        "bitrate": 5000000,
+        "quality": "high",
+        "segment_duration_seconds": 300
+      }
+    },
+    {
+      "id": "web_interface",
+      "name": "Web Interface Module",
+      "type": "web_interface",
+      "language": "javascript",
+      "executable": "/opt/dashcam/modules/web_interface/web_interface.js",
+      "auto_restart": true,
+      "config": {
+        "port": 8080,
+        "image_topic": "camera/raw_images",
+        "control_topic": "web/control"
+      }
+    }
+  ],
+  "pipelines": [
+    {
+      "id": "main_recording_pipeline",
+      "name": "Main Recording Pipeline",
+      "description": "Records camera feed to disk",
+      "auto_start": true,
+      "nodes": [
+        {
+          "module_id": "camera_interface",
+          "input_topic": "",
+          "output_topic": "camera/raw_images",
+          "config": {}
+        },
+        {
+          "module_id": "stream_encoder",
+          "input_topic": "camera/raw_images",
+          "output_topic": "encoder/status",
+          "config": {}
+        }
+      ]
+    }
+  ],
+  "camera": {
+    "calibration_file": "/etc/dashcam/camera_calibration.json",
+    "auto_calibrate": false,
+    "default_resolution": [1920, 1080],
+    "default_framerate": 30,
+    "exposure_mode": "auto",
+    "white_balance": "auto"
+  },
+  "recording": {
+    "storage_path": "/var/dashcam/recordings",
+    "max_storage_gb": 32,
+    "cleanup_policy": "oldest_first",
+    "segment_duration_minutes": 5,
+    "quality_profiles": {
+      "high": {
+        "bitrate": 8000000,
+        "resolution": [1920, 1080]
+      },
+      "medium": {
+        "bitrate": 4000000,
+        "resolution": [1280, 720]
+      },
+      "low": {
+        "bitrate": 2000000,
+        "resolution": [854, 480]
+      }
+    }
+  },
+  "web_interface": {
+    "enabled": true,
+    "port": 8080,
+    "enable_live_stream": true,
+    "enable_playback": true,
+    "enable_module_control": true,
+    "authentication": {
+      "enabled": false,
+      "username": "admin",
+      "password_hash": ""
+    }
+  },
+  "logging": {
+    "file": "/var/log/dashcam/orchestrator.log",
+    "max_size_mb": 100,
+    "max_files": 5,
+    "console_output": true,
+    "dds_logging": false
+  }
+}

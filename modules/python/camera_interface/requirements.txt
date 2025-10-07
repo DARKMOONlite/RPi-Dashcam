@@ -1,0 +1,21 @@
+# Core camera and image processing
+picamera2>=0.3.12
+opencv-python>=4.8.0
+numpy>=1.21.0
+
+# DDS middleware
+cyclonedx-python>=0.10.0
+
+# Configuration and utilities
+dataclasses-json>=0.5.9
+typing-extensions>=4.0.0
+
+# Development and testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=22.0.0
+flake8>=5.0.0
+
+# Optional: for advanced image processing
+scikit-image>=0.19.0
+pillow>=9.0.0

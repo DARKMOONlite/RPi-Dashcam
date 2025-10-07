@@ -1,0 +1,159 @@
+/**
+ * @file DashcamTypes.idl
+ * @brief Core data types for the Raspberry Pi Dashcam system
+ * https://cyclonedds.io/docs/cyclonedds-python/0.10.2/idl.html
+ * This file defines the fundamental data structures used for communication
+ * between different modules in the dashcam system via CycloneDDS.
+ */
+
+module DashcamMessageTypes {
+
+    // Basic image metadata structure
+    struct ImageMetadata {
+        unsigned long long timestamp;    // Unix timestamp in microseconds
+        unsigned long sequence_id;       // Sequential frame number
+        unsigned long width;            // Image width in pixels
+        unsigned long height;           // Image height in pixels
+        unsigned long channels;         // Number of color channels (1=grayscale, 3=RGB, 4=RGBA)
+        string format;                  // Image format ("RGB", "BGR", "GRAY", etc.)
+        string encoding;                // Data encoding ("uint8", "uint16", "float32")
+        double camera_exposure;         // Camera exposure time in seconds
+        double camera_gain;             // Camera gain value
+        string source_module;           // Module that generated this image
+    };
+
+    // Image data structure - using sequence<octet> for raw image data
+    struct ImageData {
+        ImageMetadata metadata;
+        sequence<octet> data;           // Raw image data as byte array
+    };
+
+    // Camera control commands
+    enum CameraCommand {
+        CMD_START_CAPTURE,
+        CMD_STOP_CAPTURE,
+        CMD_SET_RESOLUTION,
+        CMD_SET_FRAMERATE,
+        CMD_SET_EXPOSURE,
+        CMD_SET_GAIN,
+        CMD_CALIBRATE,
+        CMD_GET_STATUS
+    };
+
+    // Camera control message
+    struct CameraControl {
+        unsigned long long timestamp;
+        CameraCommand command;
+        string parameters;              // JSON string with command parameters
+        string requesting_module;       // Module sending the command
+    };
+
+    // Camera status information
+    enum CameraStatus {
+        STATUS_IDLE,
+        STATUS_CAPTURING,
+        STATUS_CALIBRATING,
+        STATUS_ERROR
+    };
+
+    struct CameraStatusInfo {
+        unsigned long long timestamp;
+        CameraStatus status;
+        unsigned long current_width;
+        unsigned long current_height;
+        double current_framerate;
+        double current_exposure;
+        double current_gain;
+        boolean is_calibrated;
+        string error_message;
+    };
+
+    // Module lifecycle and discovery
+    enum ModuleType {
+        MODULE_CAMERA_INTERFACE,
+        MODULE_FILTER,
+        MODULE_NEURAL_NETWORK,
+        MODULE_STREAM_ENCODER,
+        MODULE_WEB_INTERFACE,
+        MODULE_ORCHESTRATOR
+    };
+
+    enum ModuleState {
+        STATE_STARTING,
+        STATE_RUNNING,
+        STATE_STOPPING,
+        STATE_STOPPED,
+        STATE_ERROR
+    };
+
+    struct ModuleInfo {
+        string module_id;               // Unique module identifier
+        string module_name;             // Human-readable name
+        ModuleType module_type;         // Type of module
+        ModuleState state;              // Current state
+        string version;                 // Module version
+        string language;                // Implementation language
+        sequence<string> input_topics;  // Topics this module subscribes to
+        sequence<string> output_topics; // Topics this module publishes to
+        string config_schema;           // JSON schema for configuration
+        string description;             // Module description
+        unsigned long long last_heartbeat; // Last heartbeat timestamp
+    };
+
+    // Module control commands
+    enum ModuleCommand {
+        CMD_START,
+        CMD_STOP,
+        CMD_RESTART,
+        CMD_CONFIGURE,
+        CMD_GET_INFO,
+        CMD_SHUTDOWN
+    };
+
+    struct ModuleControl {
+        unsigned long long timestamp;
+        string target_module_id;        // Target module ID (empty for broadcast)
+        ModuleCommand command;
+        string parameters;              // JSON string with command parameters
+        string requesting_module;       // Module sending the command
+    };
+
+    // Performance metrics
+    struct PerformanceMetrics {
+        unsigned long long timestamp;
+        string module_id;
+        double cpu_usage;               // CPU usage percentage
+        unsigned long memory_usage;     // Memory usage in bytes
+        double processing_rate;         // Items processed per second
+        double latency_ms;              // Average processing latency in milliseconds
+        unsigned long queue_size;       // Current input queue size
+    };
+
+    // Error and logging
+    enum LogLevel {
+        LOG_DEBUG,
+        LOG_INFO,
+        LOG_WARNING,
+        LOG_ERROR,
+        LOG_CRITICAL
+    };
+
+    struct LogMessage {
+        unsigned long long timestamp;
+        string module_id;
+        LogLevel level;
+        string message;
+        string file;                    // Source file (optional)
+        unsigned long line;             // Source line (optional)
+    };
+
+    // Configuration and settings
+    struct SystemConfig {
+        string config_id;
+        unsigned long long timestamp;
+        string config_json;             // Complete system configuration as JSON
+        string version;
+        string description;
+    };
+
+};
