@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Raspberry Pi Dashcam - Video Playback</title>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="styles/style-main.css"
+		/>
+	</head>
+
+	<body>
+		<div class="sidebar">
+			<div class="sidebar--link"><a href="index.html">Home</a></div>
+			<div class="sidebar--link"><a href="video.html">Video</a></div>
+			<div class="sidebar--link"><a href="images.html">Images</a></div>
+			<div class="sidebar--link"><a href="settings.html">Settings</a></div>
+		</div>
+		<div class="header">
+			<img
+				id="icon"
+				src="media/basic icon.jfif"
+				alt="Icon"
+			/>
+			<select id="dropdown-menu">
+				<option value="live">Live Feed</option>
+				<option value="recorded">Recorded Videos</option>
+				<option value="timeline">Timeline View</option>
+			</select>
+		</div>
+		<h1>Video Playback & Monitoring</h1>
+		<hr class="divider" />
+		
+		<div class="container">
+			<div class="column">
+				<h2>Live Camera Feed</h2>
+				<div class="video-container">
+					<div class="video-placeholder" style="position: relative;">
+						<img src="media/dashcam1.jpeg" alt="Live Camera Feed" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" />
+						<div style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 4px;">
+							<p style="margin: 0; font-size: 14px;">Live Camera Feed</p>
+							<p style="margin: 0; font-size: 12px;">1920x1080 @ 30fps</p>
+							<p style="margin: 0; font-size: 12px;">Status: Connected</p>
+						</div>
+					</div>
+				</div>
+				<div class="controls">
+					<button class="control-btn">Start Recording</button>
+					<button class="control-btn">Take Snapshot</button>
+					<button class="control-btn">Toggle Stream</button>
+				</div>
+			</div>
+			
+			<div class="column">
+				<h2>Recorded Videos</h2>
+				<div class="video-list">
+					<div class="video-item">
+						<div class="video-thumb">
+							<img src="media/dashcam1.jpeg" alt="Video Thumbnail" style="width: 100%; height: 100%; object-fit: cover;" />
+						</div>
+						<div class="video-info">
+							<h3>2024-10-08_14-30-15.mp4</h3>
+							<p>Duration: 5:23 | Size: 142MB</p>
+							<p>Events: 3 motion detections</p>
+							<div class="video-actions">
+								<button class="action-btn">Play</button>
+								<button class="action-btn">Download</button>
+								<button class="action-btn">Delete</button>
+							</div>
+						</div>
+					</div>
+					
+					<div class="video-item">
+						<div class="video-thumb">
+							<img src="media/dashcam2.jpeg" alt="Video Thumbnail" style="width: 100%; height: 100%; object-fit: cover;" />
+						</div>
+						<div class="video-info">
+							<h3>2024-10-08_14-25-42.mp4</h3>
+							<p>Duration: 5:00 | Size: 128MB</p>
+							<p>Events: 1 license plate detected</p>
+							<div class="video-actions">
+								<button class="action-btn">Play</button>
+								<button class="action-btn">Download</button>
+								<button class="action-btn">Delete</button>
+							</div>
+						</div>
+					</div>
+					
+					<div class="video-item">
+						<div class="video-thumb">
+							<img src="media/dashcam3.jpeg" alt="Video Thumbnail" style="width: 100%; height: 100%; object-fit: cover;" />
+						</div>
+						<div class="video-info">
+							<h3>2024-10-08_14-20-18.mp4</h3>
+							<p>Duration: 5:00 | Size: 125MB</p>
+							<p>Events: No events detected</p>
+							<div class="video-actions">
+								<button class="action-btn">Play</button>
+								<button class="action-btn">Download</button>
+								<button class="action-btn">Delete</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<hr class="divider" />
+		
+		<div class="timeline-section">
+			<h2>Timeline Scrubber</h2>
+			<div class="timeline-container">
+				<div class="timeline-bar">
+					<div class="timeline-progress"></div>
+					<div class="timeline-marker event-marker" style="left: 25%;" title="Motion Detection - 14:31:22"></div>
+					<div class="timeline-marker event-marker" style="left: 45%;" title="License Plate - 14:32:15"></div>
+					<div class="timeline-marker event-marker" style="left: 70%;" title="Motion Detection - 14:33:42"></div>
+				</div>
+				<div class="timeline-controls">
+					<button class="timeline-btn">⏮</button>
+					<button class="timeline-btn">⏯</button>
+					<button class="timeline-btn">⏭</button>
+					<span class="time-display">14:30:15 / 14:35:38</span>
+					<button class="timeline-btn">🔄 Loop</button>
+				</div>
+			</div>
+		</div>
+		
+		<div class="search-section">
+			<h2>Search & Filter</h2>
+			<div class="search-controls">
+				<input type="date" id="date-filter" class="search-input" />
+				<input type="time" id="time-start" class="search-input" />
+				<span>to</span>
+				<input type="time" id="time-end" class="search-input" />
+				<select id="event-filter" class="search-input">
+					<option value="all">All Events</option>
+					<option value="motion">Motion Detection</option>
+					<option value="license">License Plates</option>
+					<option value="objects">Object Detection</option>
+				</select>
+				<button class="search-btn">Search</button>
+			</div>
+		</div>
+
+		<script src="scripts/script-main.js"></script>
+	</body>
+</html>

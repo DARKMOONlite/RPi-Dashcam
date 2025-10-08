@@ -65,28 +65,6 @@
       }
     }
   ],
-  "pipelines": [
-    {
-      "id": "main_recording_pipeline",
-      "name": "Main Recording Pipeline",
-      "description": "Records camera feed to disk",
-      "auto_start": true,
-      "nodes": [
-        {
-          "module_id": "camera_interface",
-          "input_topic": "",
-          "output_topic": "camera/raw_images",
-          "config": {}
-        },
-        {
-          "module_id": "stream_encoder",
-          "input_topic": "camera/raw_images",
-          "output_topic": "encoder/status",
-          "config": {}
-        }
-      ]
-    }
-  ],
   "camera": {
     "calibration_file": "/etc/dashcam/camera_calibration.json",
     "auto_calibrate": false,

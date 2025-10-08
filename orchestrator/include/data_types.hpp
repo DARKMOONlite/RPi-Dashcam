@@ -21,6 +21,13 @@ enum class LogLevel {
     Critical = 4
 };
 
+struct LogMessage {
+    time_t timestamp = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    LogLevel logging_level = LogLevel::Debug;
+    std::string module_name;
+    // LogMessage(long _time, unsigned int _log_level, std::string _module_name) : timestamp(_time), logging_level(static_cast<LogLevel>(_log_level)), module_name(_module_name){} 
+};
+
 struct LoggingInfo{
     LogLevel logging_level;
     std::string logging_topic_string;

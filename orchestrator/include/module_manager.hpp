@@ -32,18 +32,19 @@ public:
     ~ModuleManager();
 
     // Lifecycle management
-    bool initialize();
+    bool initialize(const ModuleLaunchOrder & modules);
     bool shutdown();
-
+    bool start();
 
     // Module control
     bool start_module(const std::string& module_id);
+    bool start_module(ModuleInfo module_info);
     bool stop_module(const std::string& module_id);
     bool restart_module(const std::string& module_id);
     bool configure_module(const std::string& module_id, const std::string& config);
     private:
     Logger* logger_;
-    std::unordered_map<std::string, ModuleInfo> modules_;
+    ModuleLaunchOrder modules_to_launch
 };
 
 } // namespace dashcam

@@ -37,7 +37,7 @@ public:
     LogLevel log_level_;
     std::string logging_topic_;
 
-    void log_callback(const std::string& message, LogLevel level);
+    void log_callback(const std::string& message, LogMessage log_info);
 
 };
 

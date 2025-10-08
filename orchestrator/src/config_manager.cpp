@@ -1,13 +1,4 @@
-#include <nlohmann/json.hpp>
 #include <config_manager.hpp>
-#include <logger.hpp>
-#include <module_manager.hpp>
-
-
-#include <fstream>
-using json = nlohmann::json;
-
-
 using namespace dashcam;
 
 ConfigManager::ConfigManager(Logger* logger, std::string file_path): config_data(load_config(file_path)) {
@@ -20,13 +11,32 @@ ConfigManager::~ConfigManager(){
 
 json ConfigManager::load_config(const std::string& file_path){
     std::ifstream file(file_path);
-    return(json::parse(file));
+    return json::parse(file);
 }
 bool ConfigManager::save_config(const std::string& file_path) const {
     
 
 }
 
+// bool ConfigManager::set_json_value(const std::string& json_pointer, std::variant<int, float, std::string> value){
+//     try {
+//         json::json_pointer ptr(json_pointer);
+//         if (std::holds_alternative<int>(value)) {
+//             config_data[ptr] = std::get<int>(value);
+//         } else if (std::holds_alternative<float>(value)) {
+//             config_data[ptr] = std::get<float>(value);
+//         } else if (std::holds_alternative<std::string>(value)) {
+//             config_data[ptr] = std::get<std::string>(value);
+//         } else {
+//             logger_->error("Unsupported variant type for JSON value");
+//             return false;
+//         }
+        
+//     } catch (const std::exception& e) {
+//         logger_->error(std::string("Failed to set JSON value: ") + e.what());
+//         return false;
+//     }
+// }
 
 bool ConfigManager::get_module_info(const std::string& module_id, ModuleInfo & module_info_struct){
     for (const auto& module_ : config_data.at("modules")){
@@ -104,7 +114,6 @@ bool ConfigManager::get_dds_info(DDSInfo & dds_struct){
         return false;
     }
 }
-
 
 bool ConfigManager::get_logging_info(LoggingInfo & logging_struct){
     if (config_data.contains("logging")){

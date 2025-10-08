@@ -5,7 +5,14 @@
 #include <memory>
 #include <vector>
 #include <data_types.hpp>
+#include <nlohmann/json.hpp>
 
+#include <logger.hpp>
+#include <module_manager.hpp>
+
+
+#include <fstream>
+using json = nlohmann::json;
 namespace dashcam {
 
 class Logger;
@@ -28,7 +35,9 @@ public:
     bool get_dds_info(DDSInfo & dds_struct);
     bool get_logging_info(LoggingInfo & logging_struct);
 
-    
+    // setters for specific pieces of information from the json file
+    // bool set_module_config(const std::string& module_id, const std::map<std::string,std::variant<int,float,std::string>>& config);
+    // bool set_json_value(const std::string& json_pointer, std::variant<int, float, std::string> value);
 
 
 
