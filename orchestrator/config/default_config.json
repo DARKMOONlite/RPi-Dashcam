@@ -22,8 +22,8 @@
     {
       "id": "camera_interface",
       "name": "Raspberry Pi Camera Interface",
-      "type": "camera_interface",
-      "language": "python",
+      "type": "CameraInterface",
+      "language": "Python",
       "executable": "/opt/dashcam/modules/camera_interface/camera_interface.py",
       "auto_restart": true,
       "config": {
@@ -39,8 +39,8 @@
     {
       "id": "stream_encoder",
       "name": "H.264 Stream Encoder",
-      "type": "stream_encoder",
-      "language": "c",
+      "type": "StreamEncoder",
+      "language": "C",
       "executable": "/opt/dashcam/modules/stream_encoder/stream_encoder",
       "auto_restart": true,
       "config": {
@@ -54,8 +54,8 @@
     {
       "id": "web_interface",
       "name": "Web Interface Module",
-      "type": "web_interface",
-      "language": "javascript",
+      "type": "WebInterface",
+      "language": "JavaScript",
       "executable": "/opt/dashcam/modules/web_interface/web_interface.js",
       "auto_restart": true,
       "config": {

@@ -16,32 +16,32 @@ bool Logger::initialise(){
 void Logger::debug(const std::string& message){
     LogMessage log;
     log.logging_level = LogLevel::Debug;
-    log.module_name = "logger";
+    log.name = "logger";
     log_callback(message,log);
 
 }
 void Logger::info(const std::string& message){
     LogMessage log;
     log.logging_level = LogLevel::Info;
-    log.module_name = "logger" ;
+    log.name = "logger" ;
     log_callback(message,log);
 }
 void Logger::warning(const std::string& message){
     LogMessage log;
     log.logging_level = LogLevel::Warning;
-    log.module_name = "logger" ;
+    log.name = "logger" ;
     log_callback(message,log);
 }
 void Logger::error(const std::string& message){
     LogMessage log;
     log.logging_level = LogLevel::Error;
-    log.module_name = "logger" ;
+    log.name = "logger" ;
     log_callback(message,log);
 }
 void Logger::critical(const std::string& message){
     LogMessage log;
     log.logging_level = LogLevel::Critical;
-    log.module_name = "logger" ;
+    log.name = "logger" ;
     log_callback(message,log);
 }
 void Logger::set_log_level(LogLevel level){
@@ -70,7 +70,7 @@ void Logger::log_callback(const std::string& message, LogMessage log_info){
     }
 
     // Format the log message
-    std::string formatted_message = "[" + std::string(time_str) + "] [" + level_str + "] " + message;=
+    std::string formatted_message = "[" + std::string(time_str) + "] [" + level_str + "] " + message;
 
     // Log to console
     std::cout << formatted_message << std::endl;

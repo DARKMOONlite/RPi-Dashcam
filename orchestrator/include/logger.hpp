@@ -16,7 +16,7 @@ namespace dashcam {
  */
 class Logger {
 public:
-    explicit Logger(const std::string& log_file = "", LogLevel log_level);
+    explicit Logger(const std::string& log_file = "", LogLevel log_level = LogLevel::Debug);
     ~Logger();
 
     // Initialization

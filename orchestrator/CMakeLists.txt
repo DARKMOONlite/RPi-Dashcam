@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
+project(dashcam_orchestrator VERSION 1.0 LANGUAGES CXX)
 include(FetchContent)
 
 # Find required packages
@@ -7,8 +8,8 @@ find_package(OpenCV QUIET)
 find_package(Threads REQUIRED)
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz)
 FetchContent_MakeAvailable(json)
-
-
+include_directories(/usr/local/include/ddscxx)
+include_directories(/usr/local/include/iceoryx/v)
 if(NOT OpenCV_FOUND)
     message(WARNING "OpenCV not found - some features may be limited")
     set(OpenCV_LIBS "")

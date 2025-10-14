@@ -2,7 +2,7 @@
 #define ORCHESTRATOR_BASE_MODULE
 
 #include <ddscxx/dds/dds.hpp>
-
+#include <nlohmann/json.hpp>
 
 class BaseDDSModule {
 public:
@@ -15,6 +15,9 @@ public:
     void shutdown_module();
     void get_status();
     void get_metrics();
+
+private:
+    nlohmann::json config;
 };
 
 

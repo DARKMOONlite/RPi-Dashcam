@@ -1,7 +1,16 @@
 #include <config_manager.hpp>
 using namespace dashcam;
 
-ConfigManager::ConfigManager(Logger* logger, std::string file_path): config_data(load_config(file_path)) {
+ConfigManager::ConfigManager(std::shared_ptr<Logger> logger, std::string file_path): 
+    logger_(logger), 
+    config_data_(load_config(file_path).value_or(json()))
+    {
+    if (config_data_.is_null()){
+        logger_->critical("Failed to load configuration file: " + file_path);
+        // throw std::runtime_error("Failed to load configuration file: " + file_path);
+    } else {
+        logger_->info("Configuration file loaded successfully: " + file_path);
+    }
 
 }
 
@@ -9,13 +18,17 @@ ConfigManager::~ConfigManager(){
 
 }
 
-json ConfigManager::load_config(const std::string& file_path){
+std::optional<json> ConfigManager::load_config(const std::string& file_path){
     std::ifstream file(file_path);
+    if (!file.is_open()) {
+        logger_->error("Failed to open config file: " + file_path);
+        return std::nullopt;
+    }
     return json::parse(file);
 }
 bool ConfigManager::save_config(const std::string& file_path) const {
     
-
+return(true);
 }
 
 // bool ConfigManager::set_json_value(const std::string& json_pointer, std::variant<int, float, std::string> value){
@@ -38,13 +51,14 @@ bool ConfigManager::save_config(const std::string& file_path) const {
 //     }
 // }
 
-bool ConfigManager::get_module_info(const std::string& module_id, ModuleInfo & module_info_struct){
-    for (const auto& module_ : config_data.at("modules")){
+std::optional<ModuleInfo> ConfigManager::get_module_info(const std::string& module_id) const{
+    ModuleInfo module_info_struct;
+    for (const auto& module_ : config_data_.at("modules")){
         if (module_["id"] == module_id) {
-            module_info_struct.module_id = module_.value("id","");
-            module_info_struct.module_name = module_.value("name","");
-            module_info_struct.type = string_to_module_type.at(module_.value("type",""));
-            module_info_struct.language = module_.value("language","");
+            module_info_struct.id = module_.value("id","");
+            module_info_struct.name = module_.value("name","");
+            module_info_struct.type = fromString<ModuleType>(module_.value("type","")).value_or(ModuleType::Unknown);
+            module_info_struct.language = fromString<Languages>(module_.value("language","")).value_or(Languages::Unknown);
             module_info_struct.executable_path = module_.value("executable","");
             module_info_struct.auto_restart = module_.value("auto_restart",false);
 
@@ -64,65 +78,72 @@ bool ConfigManager::get_module_info(const std::string& module_id, ModuleInfo & m
             }
 
             // Add other fields as needed, depending on ModuleInfo definition
-            return true;
+            return module_info_struct;
         }
     }
-    return false;
+    return std::nullopt;
 
 }
 
-bool ConfigManager::get_launch_modules(ModuleLaunchOrder & modules_struct){
-    if (config_data.contains("module_launch_order")){
-        for (const auto& module_id : config_data.at("module_launch_order")){
-            ModuleInfo module_info;
-            if (get_module_info(module_id, module_info)){
-                modules_struct.modules.push_back(module_info);
-            } else {
-                logger_->warning("Module ID in launch order not found in modules: " + module_id);
-                return false;
+std::optional<ModuleLaunchOrder> ConfigManager::get_launch_modules() const{
+    ModuleLaunchOrder modules_struct;
+    if (config_data_.contains("startup_order")){
+        for (const auto& module_ : config_data_.at("startup_order")){
+            if (module_.contains("modules")){
+                for (const auto& mod : module_["modules"]){
+                    auto mod_info = get_module_info(mod.get<std::string>());
+                    if (mod_info.has_value()){
+                        modules_struct.modules.push_back(mod_info.value());
+                    } 
+                    else{
+                        logger_->warning("Module ID " + mod.get<std::string>() + " in startup_order not found in modules list");
+                    }
+                }
             }
         }
-    } else {
-        logger_->warning("No module_launch_order found in configuration");
-        return false;
-    }
+    } 
 
-    if (config_data.contains("module_directories")){
-        for (const auto& dir : config_data.at("module_directories")){
-            modules_struct.module_directories.push_back(dir);
+    if (config_data_.contains("modules")|| (config_data_.contains("startup_order") && config_data_.at("startup_order").size()==0)){
+        logger_->warning("No startup_order found, loading all modules in modules list in the order they are listed");
+
+        for (const auto& module_ : config_data_.at("modules")){
+            auto mod_info = get_module_info(module_["id"].get<std::string>());
+            modules_struct.modules.push_back(mod_info.value());
         }
-    } else {
-        logger_->warning("No module_directories found in configuration");
-        return false;
+    } 
+    else{
+        return std::nullopt;
     }
 
-    modules_struct.auto_start_modules = config_data.value("auto_start_modules", false);
-
-    return true;
+        modules_struct.module_directories = config_data_.value("module_directories",std::vector<std::string>{});
+        modules_struct.auto_start_modules = config_data_.value("auto_start_modules",false);
+    return modules_struct;
 }
 
-bool ConfigManager::get_dds_info(DDSInfo & dds_struct){
-    if (config_data.contains("dds")){
-        const auto& dds_config = config_data.at("dds");
+std::optional<DDSInfo> ConfigManager::get_dds_info() const{
+    DDSInfo dds_struct;
+    if (config_data_.contains("dds")){
+        const auto& dds_config = config_data_.at("dds");
         dds_struct.domain_id = dds_config.value("domain_id",0);
         dds_struct.qos_profile = dds_config.value("qos_profile","default");
         dds_struct.discovery_timeout_ms = dds_config.value("discovery_timeout_ms",1000);
         dds_struct.heartbeat_interval_ms = dds_config.value("heartbeat_interval_ms",5000);
-        return true;
+        return dds_struct;
     } else {
         logger_->warning("No dds configuration found");
-        return false;
+        return std::nullopt;
     }
 }
 
-bool ConfigManager::get_logging_info(LoggingInfo & logging_struct){
-    if (config_data.contains("logging")){
-        const auto& log_config = config_data.at("logging");
+std::optional<LoggingInfo> ConfigManager::get_logging_info() const{
+    LoggingInfo logging_struct;
+    if (config_data_.contains("logging")){
+        const auto& log_config = config_data_.at("logging");
         logging_struct.file = log_config.value("log_file","dashcam.log");
         logging_struct.logging_topic_string = log_config.value("logging_topic","/logging");
-        return true;
+        return logging_struct;
     } else {
         logger_->warning("No logging configuration found");
-        return false;
+        return std::nullopt;
     }
 }

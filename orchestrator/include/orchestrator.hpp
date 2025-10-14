@@ -6,21 +6,12 @@
 #include <unordered_map>
 #include <memory>
 #include <chrono>
-
+#include <config_manager.hpp>
+#include <module_manager.hpp>
+#include <logger.hpp>
+#include <data_types.hpp>
 namespace dashcam {
 
-// Forward declarations
-class ModuleManager;
-class ConfigManager;
-class Logger;
-
-
-// struct OrchestratorConfig {
-//     unsigned int heartbeat_interval_ms;
-//     unsigned int module_check_interval_ms;
-//     bool auto_restart_modules;
-//     int logging_level;
-// };
 
 /**
  * @brief Main orchestrator class that coordinates the entire dashcam system
@@ -38,26 +29,22 @@ public:
     ~Orchestrator();
 
 
-    // // Module management
-    // bool start_module(const std::string& module_id);
-    // bool stop_module(const std::string& module_id);
-    // bool restart_module(const std::string& module_id);
-    // std::vector<std::string> list_modules() const;
-    
-    // // Pipeline management
-    // bool start_pipeline(const std::string& pipeline_id);
-    // bool stop_pipeline(const std::string& pipeline_id);
-    // bool create_pipeline(const std::string& pipeline_config);
-    // std::vector<std::string> list_pipelines() const;
+
 
     // Run the main orchestrator loop
     void run();
 
+
+    //getters for core components
+    std::shared_ptr<Logger> get_logger() const { return logger_; }
+    std::shared_ptr<ConfigManager> get_config_manager() const { return config_manager_; }
+    std::shared_ptr<ModuleManager> get_module_manager() const { return module_manager_; }
+
 private:
     // Core components
-    // std::unique_ptr<ModuleManager> module_manager_;
-    // std::unique_ptr<ConfigManager> config_manager_;
-    // std::unique_ptr<Logger> logger_;
+    std::shared_ptr<ModuleManager> module_manager_;
+    std::shared_ptr<ConfigManager> config_manager_;
+    std::shared_ptr<Logger> logger_;
     
 };
 
